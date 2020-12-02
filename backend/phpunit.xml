@@ -1,0 +1,5 @@
+<phpunit
+        stopOnFailure="false"
+        stopOnError="false"
+>
+</phpunit>

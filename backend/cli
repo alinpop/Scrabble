@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+namespace MySelf\Scrabble\Infrastructure\Delivery\Console;
+
+require __DIR__.'/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+$application->add((new DisplayBoardCommandFactory())->get());
+$application->add((new CreatePlayerCommandFactory())->get());
+$application->add((new PrepareGameCommandFactory())->get());
+$application->add((new AddPlayerToGameCommandFactory())->get());
+
+$application->run();
