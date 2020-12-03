@@ -52,9 +52,13 @@ class StartGameCommandTest extends CommandTestCase
             self::$playerRepository->getPlayer('player_1')
         );
 
-        $gameArray = json_decode(json_encode($game), true);
+        $gameArray = $this->objectToArray($game);
 
         $this->assertEquals(Game::STATUS_STARTED, $gameArray['status']);
+
+        $this->assertCount(7, $gameArray['playerLetters']['player_1']);
+        $this->assertCount(7, $gameArray['playerLetters']['player_2']);
+        $this->assertCount(7, $gameArray['playerLetters']['player_3']);
     }
 
     /**
@@ -63,6 +67,7 @@ class StartGameCommandTest extends CommandTestCase
     public function testAddingPlayerAfterTheStartGame()
     {
         $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Player cannot be added when Game status is started");
 
         self::$addPlayerCommand->execute(['player' => 'player_1', 'newPlayer' => 'player_4']);
     }

@@ -4,7 +4,9 @@ namespace MySelf\Scrabble\Domain\Games;
 
 use MySelf\Scrabble\Domain\Boards\Board;
 use MySelf\Scrabble\Domain\Letters\LetterBagFactory;
+use MySelf\Scrabble\Domain\Letters\LetterFactory;
 use MySelf\Scrabble\Domain\Players\Player;
+use MySelf\Scrabble\Domain\Players\PlayerFactory;
 
 class GameFactory
 {
@@ -17,30 +19,32 @@ class GameFactory
         );
     }
 
-    public function fromArray(array $array): Game
+    public function fromArray(array $array, ?string $initiator = null): Game
     {
-        $initiatorOfTheGame = array_shift($array['players']);
+        $initiatorOfTheGame = $initiator ?? $array['players'][0];
+
+        $letterFactory = new LetterFactory();
+        foreach ($array['playerLetters'] as &$letters) {
+            $letters = $letterFactory->fromArray($letters);
+        }
 
         $game = new Game(
             new Player($initiatorOfTheGame),
             new Board(),
             (new LetterBagFactory())->fromArray($array['letterBag']),
+            (new PlayerFactory())->fromCollection($array['players']),
+            $array['status'],
+            $array['playerLetters'],
             new GameId($array['gameId'])
         );
-
-        foreach ($array['players'] as $player) {
-            $game->addPlayer(new Player($player));
-        }
-
-        $game->updateStatus($array['status']);
 
         return $game;
     }
 
-    public function fromJson(string $json): Game
+    public function fromJson(string $json, ?string $initiator = null): Game
     {
         $array = json_decode($json, true);
 
-        return $this->fromArray($array);
+        return $this->fromArray($array, $initiator);
     }
 }

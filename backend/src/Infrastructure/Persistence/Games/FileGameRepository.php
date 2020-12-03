@@ -48,7 +48,7 @@ class FileGameRepository extends FileRepository implements GameRepository
         }
 
         if ($result) {
-            return (new GameFactory())->fromJson($result[2]);
+            return (new GameFactory())->fromJson($result[2], $result[0]);
         }
 
         throw new \Exception('No Game started');

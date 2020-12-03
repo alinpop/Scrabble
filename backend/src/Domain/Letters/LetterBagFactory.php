@@ -4,7 +4,7 @@ namespace MySelf\Scrabble\Domain\Letters;
 
 class LetterBagFactory
 {
-    public function fromArray($array): LetterBag
+    public function fromArray(array $array): LetterBag
     {
         $letters = [];
         foreach ($array as $letter) {

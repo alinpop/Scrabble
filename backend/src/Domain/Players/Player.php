@@ -30,4 +30,9 @@ class Player
 
         return count($regexResult);
     }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 }

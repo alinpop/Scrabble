@@ -2,7 +2,6 @@
 
 namespace MySelf\Scrabble\Application\StartGameService;
 
-use MySelf\Scrabble\Domain\Games\Game;
 use MySelf\Scrabble\Domain\Games\GameRepository;
 use MySelf\Scrabble\Domain\Players\PlayerRepository;
 
@@ -23,7 +22,7 @@ class StartGameService
             $this->playerRepository->getPlayer($player)
         );
 
-        $game->updateStatus(Game::STATUS_STARTED);
+        $game->start();
 
         $this->gameRepository->save($game);
     }

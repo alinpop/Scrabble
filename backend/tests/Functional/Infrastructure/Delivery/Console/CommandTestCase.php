@@ -4,9 +4,9 @@ namespace MySelf\Scrabble\Tests\Functional\Infrastructure\Delivery\Console;
 
 use MySelf\Scrabble\Infrastructure\Persistence\Games\FileGameRepository;
 use MySelf\Scrabble\Infrastructure\Persistence\Players\FilePlayerRepository;
-use PHPUnit\Framework\TestCase;
+use MySelf\Scrabble\Tests\Unit\HelperTestCase;
 
-class CommandTestCase extends TestCase
+class CommandTestCase extends HelperTestCase
 {
     protected static FilePlayerRepository $playerRepository;
     protected static FileGameRepository $gameRepository;

@@ -2,7 +2,7 @@
 
 namespace MySelf\Scrabble\Domain\Letters;
 
-class Letter
+class Letter implements \JsonSerializable
 {
     public const MAP = [
         'A' => ['value' => 1, 'count' => 11],
@@ -33,9 +33,11 @@ class Letter
     private string $letter;
     private int $value;
 
-    public function __construct(string $letter, int $value)
+    public function __construct(string $letter, ?int $value = null)
     {
         $this->setLetter($letter);
+
+        $value = $value ?? self::MAP[$letter]['value'];
         $this->setValue($value);
     }
 
@@ -84,6 +86,11 @@ class Letter
     }
 
     public function __toString(): string
+    {
+        return $this->letter ?? '';
+    }
+
+    public function jsonSerialize(): string
     {
         return $this->letter ?? '';
     }

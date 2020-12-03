@@ -42,8 +42,10 @@ class LetterBag implements \Countable, \JsonSerializable
         $randomKeys = array_rand($this->letters, $number);
         foreach ((array) $randomKeys as $key) {
             $letters[] = $this->letters[$key];
-            unset($this->letters[$key]);
+            $this->letters[$key] = null;
         }
+
+        $this->letters = array_values(array_filter($this->letters));
 
         return $letters;
     }

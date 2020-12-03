@@ -18,11 +18,11 @@ php backend/cli startGame player_3
 
 # Concepts
 
-## App
+#### App
 * has Players
 * has Games
 
-## Game
+#### Game
 * has Players
 * has a Board
 * has a Bag of Letters
@@ -31,7 +31,7 @@ php backend/cli startGame player_3
 * decides which Player won
 * keeps the Score
 
-## Player
+#### Player
 * in Game State:
     * has Letters
     * has Score
@@ -50,11 +50,11 @@ php backend/cli startGame player_3
     * create account
     * prepare Game
 
-## Game State
+#### Game State
 * belongs to Player 
 * compute Word value
 
-## Board
+#### Board
 * has Squares [1-15, A-O]
     * Squares have Letters
     * Squares have Values
@@ -63,14 +63,14 @@ php backend/cli startGame player_3
 * has Words
 * validate move
 
-## Letter
+#### Letter
 * has Value
 
-## Bag of Letters
+#### Bag of Letters
 * has Letters
 * counter
 
-## Word
+#### Word
 * has Validation
 
 # Help
