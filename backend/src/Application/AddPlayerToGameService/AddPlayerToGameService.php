@@ -2,6 +2,7 @@
 
 namespace MySelf\Scrabble\Application\AddPlayerToGameService;
 
+use MySelf\Scrabble\Domain\Games\Game;
 use MySelf\Scrabble\Domain\Games\GameRepository;
 use MySelf\Scrabble\Domain\Players\Player;
 use MySelf\Scrabble\Domain\Players\PlayerRepository;
@@ -23,6 +24,11 @@ class AddPlayerToGameService
             $activeGame = $this->gameRepository->getPlayerGame(
                 $this->playerRepository->getPlayer($playerName)
             );
+
+            $gameStatus = $activeGame->getStatus();
+            if ($gameStatus !== Game::STATUS_PREPARING) {
+                throw new \Exception("Player cannot be added when Game status is $gameStatus");
+            }
 
             $newPlayer = $this->playerRepository->getPlayer($newPlayerName);
 

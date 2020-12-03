@@ -25,6 +25,7 @@ class StartGameCommandTest extends CommandTestCase
         self::$playerRepository->save(new Player('player_1'));
         self::$playerRepository->save(new Player('player_2'));
         self::$playerRepository->save(new Player('player_3'));
+        self::$playerRepository->save(new Player('player_4'));
 
         self::$prepareGameCommand = new CommandTester(new PrepareGameCommand(
             new PrepareGameService(self::$gameRepository, self::$playerRepository)
@@ -54,5 +55,26 @@ class StartGameCommandTest extends CommandTestCase
         $gameArray = json_decode(json_encode($game), true);
 
         $this->assertEquals(Game::STATUS_STARTED, $gameArray['status']);
+    }
+
+    /**
+     * @depends testStartGame
+     */
+    public function testAddingPlayerAfterTheStartGame()
+    {
+        $this->expectException(\Exception::class);
+
+        self::$addPlayerCommand->execute(['player' => 'player_1', 'newPlayer' => 'player_4']);
+    }
+
+    /**
+     * @depends testStartGame
+     */
+    public function testPlayerStartingNotAvailableGame()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No Game started');
+
+        self::$startGameCommand->execute(['player' => 'player_4']);
     }
 }

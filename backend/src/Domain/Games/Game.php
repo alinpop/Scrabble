@@ -52,6 +52,11 @@ class Game implements \JsonSerializable
         return $this->letterBag;
     }
 
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     public function jsonSerialize(): array
     {
         $players = [];
@@ -75,8 +80,14 @@ class Game implements \JsonSerializable
 
     public function updateStatus(string $status)
     {
-        if (!in_array($status, [self::STATUS_PREPARING, self::STATUS_STARTED, self::STATUS_FINISHED])) {
+        $statusArrayOrdered = [self::STATUS_PREPARING, self::STATUS_STARTED, self::STATUS_FINISHED];
+
+        if (!in_array($status, $statusArrayOrdered)) {
             throw new \InvalidArgumentException("Game status $status is not correct");
+        }
+
+        if (array_search($status, $statusArrayOrdered) < array_search($this->status, $statusArrayOrdered)) {
+            throw new \Exception("The status $this->status cannot be transformed to $status");
         }
 
         $this->status = $status;
