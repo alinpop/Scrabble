@@ -1,6 +1,6 @@
 <?php
 
-namespace MySelf\Scrabble\Unit\Domain\Boards;
+namespace MySelf\Scrabble\Tests\Unit\Domain\Boards;
 
 use MySelf\Scrabble\Domain\Boards\Square;
 use PHPUnit\Framework\TestCase;

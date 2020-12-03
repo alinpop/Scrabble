@@ -1,6 +1,6 @@
 <?php
 
-namespace MySelf\Scrabble\Functional\Infrastructure\Delivery\Console;
+namespace MySelf\Scrabble\Tests\Functional\Infrastructure\Delivery\Console;
 
 use MySelf\Scrabble\Infrastructure\Delivery\Console\DisplayBoardCommandFactory;
 use PHPUnit\Framework\TestCase;

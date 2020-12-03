@@ -1,6 +1,6 @@
 <?php
 
-namespace MySelf\Scrabble\Functional\Infrastructure\Delivery\Console;
+namespace MySelf\Scrabble\Tests\Functional\Infrastructure\Delivery\Console;
 
 use MySelf\Scrabble\Application\PrepareGameService\PrepareGameService;
 use MySelf\Scrabble\Domain\Games\Game;

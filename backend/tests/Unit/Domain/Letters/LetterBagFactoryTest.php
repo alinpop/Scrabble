@@ -1,6 +1,6 @@
 <?php
 
-namespace MySelf\Scrabble\Unit\Domain\Letters;
+namespace MySelf\Scrabble\Tests\Unit\Domain\Letters;
 
 use MySelf\Scrabble\Domain\Letters\Letter;
 use MySelf\Scrabble\Domain\Letters\LetterBag;

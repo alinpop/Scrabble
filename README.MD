@@ -3,6 +3,19 @@ List all available commands in CLI: `php backend/cli list`.
 
 If you need help for a comand, run something like `php backend/cli prepareGame --help`.
 
+A typical CLI workflow would be:
+```
+php backend/cli createPlayer player_1
+php backend/cli createPlayer player_2
+php backend/cli createPlayer player_3
+
+php backend/cli prepareGame player_3
+php backend/cli addPlayer player_3 player_1
+php backend/cli addPlayer player_3 player_2
+
+php backend/cli startGame player_3
+```
+
 # Concepts
 
 ## App

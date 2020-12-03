@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MySelf\Scrabble\Functional\Infrastructure\Delivery\Console;
+namespace MySelf\Scrabble\Tests\Functional\Infrastructure\Delivery\Console;
 
 use MySelf\Scrabble\Infrastructure\Persistence\Games\FileGameRepository;
 use MySelf\Scrabble\Infrastructure\Persistence\Players\FilePlayerRepository;

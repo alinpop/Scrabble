@@ -8,6 +8,7 @@ use MySelf\Scrabble\Domain\Players\Player;
 
 class Game implements \JsonSerializable
 {
+    public const STATUS_PREPARING = 'preparing';
     public const STATUS_STARTED = 'started';
     public const STATUS_FINISHED = 'finished';
 
@@ -33,7 +34,7 @@ class Game implements \JsonSerializable
         $this->initiator = $player;
 
         $this->gameId = $gameId ?? new GameId(uniqid('', true));
-        $this->status = self::STATUS_STARTED;
+        $this->status = self::STATUS_PREPARING;
     }
 
     public function getInitiator(): Player
@@ -70,5 +71,14 @@ class Game implements \JsonSerializable
     public function addPlayer(Player $player)
     {
         $this->players[] = $player;
+    }
+
+    public function updateStatus(string $status)
+    {
+        if (!in_array($status, [self::STATUS_PREPARING, self::STATUS_STARTED, self::STATUS_FINISHED])) {
+            throw new \InvalidArgumentException("Game status $status is not correct");
+        }
+
+        $this->status = $status;
     }
 }

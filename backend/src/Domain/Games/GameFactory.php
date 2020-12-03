@@ -32,6 +32,8 @@ class GameFactory
             $game->addPlayer(new Player($player));
         }
 
+        $game->updateStatus($array['status']);
+
         return $game;
     }
 

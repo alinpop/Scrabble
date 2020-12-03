@@ -41,7 +41,7 @@ class FileGameRepository extends FileRepository implements GameRepository
             $gameArray = json_decode($data[2], true);
 
             $playerInTheGame = in_array($player->getName(), $gameArray['players']);
-            $statusStarted = $gameArray['status'] === Game::STATUS_STARTED;
+            $statusStarted = $gameArray['status'] !== Game::STATUS_FINISHED;
             if ($playerInTheGame && $statusStarted) {
                 $result = $data;
             }

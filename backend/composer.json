@@ -6,8 +6,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "MySelf\\Scrabble\\Unit\\": "tests/Unit/",
-      "MySelf\\Scrabble\\Functional\\": "tests/Functional/"
+      "MySelf\\Scrabble\\Tests\\": "tests/"
     }
   },
   "require": {
