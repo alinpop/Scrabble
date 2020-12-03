@@ -31,6 +31,8 @@ class FileGameRepository extends FileRepository implements GameRepository
 
     public function getPlayerGame(Player $player): Game
     {
+        $result = null;
+
         foreach ($this->readData() as $data) {
             if (!$data) {
                 continue;
@@ -41,8 +43,12 @@ class FileGameRepository extends FileRepository implements GameRepository
             $playerInTheGame = in_array($player->getName(), $gameArray['players']);
             $statusStarted = $gameArray['status'] === Game::STATUS_STARTED;
             if ($playerInTheGame && $statusStarted) {
-                return (new GameFactory())->fromJson($data[2]);
+                $result = $data;
             }
+        }
+
+        if ($result) {
+            return (new GameFactory())->fromJson($result[2]);
         }
 
         throw new \Exception('No Game started');

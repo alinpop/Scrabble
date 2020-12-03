@@ -3,7 +3,6 @@
 namespace MySelf\Scrabble\Domain\Games;
 
 use MySelf\Scrabble\Domain\Boards\Board;
-use MySelf\Scrabble\Domain\Letters\LetterBag;
 use MySelf\Scrabble\Domain\Letters\LetterBagFactory;
 use MySelf\Scrabble\Domain\Players\Player;
 
@@ -20,12 +19,18 @@ class GameFactory
 
     public function fromArray(array $array): Game
     {
+        $initiatorOfTheGame = array_shift($array['players']);
+
         $game = new Game(
-            new Player($array['players'][0]),
+            new Player($initiatorOfTheGame),
             new Board(),
             (new LetterBagFactory())->fromArray($array['letterBag']),
             new GameId($array['gameId'])
         );
+
+        foreach ($array['players'] as $player) {
+            $game->addPlayer(new Player($player));
+        }
 
         return $game;
     }

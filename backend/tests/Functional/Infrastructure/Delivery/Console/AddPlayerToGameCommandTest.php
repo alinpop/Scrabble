@@ -40,10 +40,15 @@ class AddPlayerToGameCommandTest extends CommandTestCase
         self::$prepareGameCommand->execute(['player' => 'player_1']);
 
         self::$addPlayerCommand->execute(['player' => 'player_1', 'newPlayer' => 'player_2']);
+        self::$addPlayerCommand->execute(['player' => 'player_1', 'newPlayer' => 'player_3']);
 
         $game = self::$gameRepository->getPlayerGame(new Player('player_2'));
-
         $this->assertInstanceOf(Game::class, $game);
+
+        $game = self::$gameRepository->getPlayerGame(new Player('player_3'));
+        $this->assertInstanceOf(Game::class, $game);
+
+        $this->assertCount(3, json_decode(json_encode($game), true)['players']);
     }
 
     /**
@@ -54,7 +59,7 @@ class AddPlayerToGameCommandTest extends CommandTestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage("player_2 is playing another Game");
 
-        self::$prepareGameCommand->execute(['player' => 'player_3']);
+        self::$prepareGameCommand->execute(['player' => 'player_4']);
         self::$addPlayerCommand->execute(['player' => 'player_1', 'newPlayer' => 'player_2']);
     }
 

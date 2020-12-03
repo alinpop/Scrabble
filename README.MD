@@ -5,11 +5,11 @@ If you need help for a comand, run something like `php backend/cli prepareGame -
 
 # Concepts
 
-##App
+## App
 * has Players
 * has Games
 
-##Game
+## Game
 * has Players
 * has a Board
 * has a Bag of Letters
@@ -18,7 +18,7 @@ If you need help for a comand, run something like `php backend/cli prepareGame -
 * decides which Player won
 * keeps the Score
 
-##Player
+## Player
 * in Game State:
     * has Letters
     * has Score
@@ -41,7 +41,7 @@ If you need help for a comand, run something like `php backend/cli prepareGame -
 * belongs to Player 
 * compute Word value
 
-##Board
+## Board
 * has Squares [1-15, A-O]
     * Squares have Letters
     * Squares have Values
@@ -50,14 +50,14 @@ If you need help for a comand, run something like `php backend/cli prepareGame -
 * has Words
 * validate move
 
-##Letter
+## Letter
 * has Value
 
-##Bag of Letters
+## Bag of Letters
 * has Letters
 * counter
 
-##Word
+## Word
 * has Validation
 
 # Help
