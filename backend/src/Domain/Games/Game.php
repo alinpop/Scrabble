@@ -18,7 +18,7 @@ class Game implements \JsonSerializable
     private Board $board;
     private LetterBag $letterBag;
 
-    private Player $initiatior;
+    private Player $initiator;
     private string $status;
 
     public function __construct(
@@ -30,7 +30,7 @@ class Game implements \JsonSerializable
         $this->players[] = $player;
         $this->board = $board;
         $this->letterBag = $letterBag;
-        $this->initiatior = $player;
+        $this->initiator = $player;
 
         $this->gameId = $gameId ?? new GameId(uniqid('', true));
         $this->status = self::STATUS_STARTED;
@@ -38,7 +38,7 @@ class Game implements \JsonSerializable
 
     public function getInitiator(): Player
     {
-        return $this->initiatior;
+        return $this->initiator;
     }
 
     public function getGameId(): GameId
@@ -65,5 +65,10 @@ class Game implements \JsonSerializable
             'board' => [],
             'letterBag' => $this->letterBag,
         ];
+    }
+
+    public function addPlayer(Player $player)
+    {
+        $this->players[] = $player;
     }
 }

@@ -82,4 +82,9 @@ class Letter
 
         $this->value = $value;
     }
+
+    public function __toString(): string
+    {
+        return $this->letter ?? '';
+    }
 }

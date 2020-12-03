@@ -2,11 +2,11 @@
 
 namespace MySelf\Scrabble\Application\AddPlayerToGameService;
 
-use MySelf\Scrabble\Application\ApplicationService;
 use MySelf\Scrabble\Domain\Games\GameRepository;
+use MySelf\Scrabble\Domain\Players\Player;
 use MySelf\Scrabble\Domain\Players\PlayerRepository;
 
-class AddPlayerToGameService implements ApplicationService
+class AddPlayerToGameService
 {
     private PlayerRepository $playerRepository;
     private GameRepository $gameRepository;
@@ -17,8 +17,37 @@ class AddPlayerToGameService implements ApplicationService
         $this->gameRepository = $gameRepository;
     }
 
-    public function run()
+    public function run(string $playerName, string $newPlayerName)
     {
-        // TODO: Implement run() method.
+        try {
+            $activeGame = $this->gameRepository->getPlayerGame(
+                $this->playerRepository->getPlayer($playerName)
+            );
+
+            $newPlayer = $this->playerRepository->getPlayer($newPlayerName);
+
+            if ($this->playerHasActiveGame($newPlayer)) {
+                throw new \Exception("{$newPlayer->getName()} is playing another Game");
+            }
+
+            $activeGame->addPlayer($newPlayer);
+
+            $this->gameRepository->save($activeGame);
+        } catch (\Throwable $e) {
+            throw new \Exception(
+                "Player '$newPlayerName' could not be added to the Game: " . $e->getMessage()
+            );
+        }
+    }
+
+    private function playerHasActiveGame(Player $newPlayer): bool
+    {
+        try {
+            $this->gameRepository->getPlayerGame($newPlayer);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }

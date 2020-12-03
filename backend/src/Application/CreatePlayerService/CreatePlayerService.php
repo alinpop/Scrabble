@@ -2,11 +2,10 @@
 
 namespace MySelf\Scrabble\Application\CreatePlayerService;
 
-use MySelf\Scrabble\Application\ApplicationService;
 use MySelf\Scrabble\Domain\Players\Player;
 use MySelf\Scrabble\Domain\Players\PlayerRepository;
 
-class CreatePlayerService implements ApplicationService
+class CreatePlayerService
 {
     private PlayerRepository $playerRepository;
 

@@ -2,11 +2,10 @@
 
 namespace MySelf\Scrabble\Application\DisplayBoardService;
 
-use MySelf\Scrabble\Application\ApplicationService;
 use MySelf\Scrabble\Domain\Boards\Board;
 use MySelf\Scrabble\Domain\Boards\Square;
 
-class DisplayBoardService implements ApplicationService
+class DisplayBoardService
 {
     /** @var Board */
     private Board $board;

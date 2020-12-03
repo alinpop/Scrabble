@@ -1,4 +1,9 @@
-#Concepts
+# DOCS
+List all available commands in CLI: `php backend/cli list`.
+
+If you need help for a comand, run something like `php backend/cli prepareGame --help`.
+
+# Concepts
 
 ##App
 * has Players

@@ -23,7 +23,6 @@ class AddPlayerToGameCommand extends Command
     protected function configure()
     {
         $this->addArgument('player', InputArgument::REQUIRED, 'The player who does the command.');
-        $this->addArgument('gameId', InputArgument::REQUIRED, 'The ID of the Game');
         $this->addArgument('newPlayer', InputArgument::REQUIRED, 'The player that is added');
 
         $this->setDescription('Command to add Player to Game.');
@@ -32,8 +31,9 @@ class AddPlayerToGameCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $player = $input->getArgument('player');
-        $gameId = $input->getArgument('gameId');
         $newPlayer = $input->getArgument('newPlayer');
+
+        $this->addPlayerToGameService->run($player, $newPlayer);
 
         return Command::SUCCESS;
     }

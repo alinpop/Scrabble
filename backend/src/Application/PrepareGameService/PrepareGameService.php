@@ -2,12 +2,11 @@
 
 namespace MySelf\Scrabble\Application\PrepareGameService;
 
-use MySelf\Scrabble\Application\ApplicationService;
 use MySelf\Scrabble\Domain\Games\GameFactory;
 use MySelf\Scrabble\Domain\Games\GameRepository;
 use MySelf\Scrabble\Domain\Players\PlayerRepository;
 
-class PrepareGameService implements ApplicationService
+class PrepareGameService
 {
     private GameRepository $gameRepository;
     private PlayerRepository $playerRepository;
