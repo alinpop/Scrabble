@@ -4,20 +4,18 @@ namespace MySelf\Scrabble\Application\DisplayBoardService;
 
 use MySelf\Scrabble\Domain\Boards\Board;
 use MySelf\Scrabble\Domain\Boards\Square;
+use MySelf\Scrabble\Domain\Boards\SquareBonus\DoubleValueForLetter;
+use MySelf\Scrabble\Domain\Boards\SquareBonus\DoubleValueForWord;
+use MySelf\Scrabble\Domain\Boards\SquareBonus\SquareBonus;
+use MySelf\Scrabble\Domain\Boards\SquareBonus\TripleValueForLetter;
+use MySelf\Scrabble\Domain\Boards\SquareBonus\TripleValueForWord;
 
 class DisplayBoardService
 {
-    /** @var Board */
-    private Board $board;
-
-    public function __construct(Board $board)
+    public function run(?Board $board = null): array
     {
-        $this->board = $board;
-    }
-
-    public function run()
-    {
-        $squares = $this->board->getSquares();
+        $board = $board ?? new Board();
+        $squares = $board->getSquares();
 
         $data = [];
         foreach ($squares as $squaresOnRows)
@@ -27,7 +25,8 @@ class DisplayBoardService
                 $squareLetter = $square->getLetter() ? ' ' . $square->getLetter() : ' _';
 
                 if ($squareLetter === ' _' && $square->getBonus() !== null) {
-                    $squareLetter = ' %';
+                    $squareLetter = $this->setSquareBonusField($square->getBonus());
+                    //$squareLetter = ' <comment>%</comment>';
                 }
 
                 $data[$square->getRow()][sprintf('%02d', $square->getColumn())] = $squareLetter;
@@ -35,5 +34,28 @@ class DisplayBoardService
         }
 
         return $data;
+    }
+
+    private function setSquareBonusField(SquareBonus $bonus): string
+    {
+        $string = '_';
+
+        if ($bonus instanceof DoubleValueForLetter) {
+            $string = "<info>+</info>";
+        }
+
+        if ($bonus instanceof TripleValueForLetter) {
+            $string = "<question>+</question>";
+        }
+
+        if ($bonus instanceof DoubleValueForWord) {
+            $string = "<comment>*</comment>";
+        }
+
+        if ($bonus instanceof TripleValueForWord) {
+            $string = "<error>*</error>";
+        }
+
+        return " $string";
     }
 }

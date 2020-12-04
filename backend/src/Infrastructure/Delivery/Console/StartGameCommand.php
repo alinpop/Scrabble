@@ -33,9 +33,9 @@ class StartGameCommand extends Command
     {
         $playerName = $input->getArgument('player');
 
-        $this->startGameService->run($playerName);
+        $board = $this->startGameService->run($playerName);
 
-        $output->writeln($this->boardView->get([]));
+        $output->writeln($this->boardView->get($board));
 
         return Command::SUCCESS;
     }

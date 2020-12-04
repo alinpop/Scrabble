@@ -3,6 +3,7 @@
 namespace MySelf\Scrabble\Tests\Functional\Infrastructure\Delivery\Console;
 
 use MySelf\Scrabble\Application\AddPlayerToGameService\AddPlayerToGameService;
+use MySelf\Scrabble\Application\DisplayBoardService\DisplayBoardService;
 use MySelf\Scrabble\Application\PrepareGameService\PrepareGameService;
 use MySelf\Scrabble\Application\StartGameService\StartGameService;
 use MySelf\Scrabble\Domain\Games\Game;
@@ -11,10 +12,13 @@ use MySelf\Scrabble\Infrastructure\Delivery\Console\AddPlayerToGameCommand;
 use MySelf\Scrabble\Infrastructure\Delivery\Console\PrepareGameCommand;
 use MySelf\Scrabble\Infrastructure\Delivery\Console\StartGameCommand;
 use MySelf\Scrabble\Presentation\Cli\BoardView;
+use MySelf\Scrabble\Tests\Functional\AssertBoardIsDisplayed;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class StartGameCommandTest extends CommandTestCase
 {
+    use AssertBoardIsDisplayed;
+
     private static CommandTester $startGameCommand;
     private static CommandTester $addPlayerCommand;
     private static CommandTester $prepareGameCommand;
@@ -37,7 +41,7 @@ class StartGameCommandTest extends CommandTestCase
         ));
 
         self::$startGameCommand = new CommandTester(new StartGameCommand(
-            new StartGameService(self::$playerRepository, self::$gameRepository), new BoardView()
+            new StartGameService(new DisplayBoardService(), self::$playerRepository, self::$gameRepository), new BoardView()
         ));
     }
 
@@ -67,6 +71,8 @@ class StartGameCommandTest extends CommandTestCase
         $this->assertCount(3, $playerOrderToMove);
 
         $this->assertEquals($playerOrderToMove[0], $gameArray['playerToMove']);
+
+        $this->assertBoardIsDisplayed(self::$startGameCommand->getDisplay());
     }
 
     /**

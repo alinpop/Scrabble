@@ -142,4 +142,9 @@ class Game implements \JsonSerializable
             'playOrder' => $this->playOrder,
         ];
     }
+
+    public function getBoard(): Board
+    {
+        return $this->board;
+    }
 }
