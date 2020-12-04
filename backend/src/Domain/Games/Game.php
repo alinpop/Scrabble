@@ -22,6 +22,7 @@ class Game implements \JsonSerializable
     private Player $initiator;
     private string $status;
     private string $playOrder = '';
+    private ?Player $playerToMove;
     private array $playerLetters = [];
 
     public function __construct(
@@ -30,20 +31,20 @@ class Game implements \JsonSerializable
         LetterBag $letterBag,
         ?array $players = null,
         ?string $status = null,
+        ?Player $playerToMove = null,
         ?array $playerLetters = [],
+        ?string $playOrder = '',
         ?GameId $gameId = null
     ) {
         $this->initiator = $initiator;
         $this->board = $board;
         $this->letterBag = $letterBag;
-
         $this->players = $players ?: [$initiator];
-
         $this->status = $status ?? self::STATUS_PREPARING;
-
         $this->playerLetters = $playerLetters ?? [];
-
+        $this->playOrder = $playOrder ?? '';
         $this->gameId = $gameId ?? new GameId(uniqid('', true));
+        $this->playerToMove = $playerToMove;
     }
 
     public function getInitiator(): Player
@@ -78,6 +79,15 @@ class Game implements \JsonSerializable
         $this->playOrder = implode(',', $this->players);
     }
 
+    private function setPlayerToMove()
+    {
+        if (!$this->playerToMove) {
+            $playersInOrder = explode(',', $this->playOrder);
+
+            $this->playerToMove = new Player($playersInOrder[0]);
+        }
+    }
+
     public function updateStatus(string $status)
     {
         $statusArrayOrdered = [self::STATUS_PREPARING, self::STATUS_STARTED, self::STATUS_FINISHED];
@@ -101,6 +111,8 @@ class Game implements \JsonSerializable
 
         $this->setPlayOrder();
 
+        $this->setPlayerToMove();
+
         $this->updateStatus(self::STATUS_STARTED);
     }
 
@@ -120,13 +132,14 @@ class Game implements \JsonSerializable
         }
 
         return [
-            'gameId' => $this->gameId->getId(),
-            'status' => $this->status,
-            'players' => $players,
-            'playOrder' => $this->playOrder,
             'board' => [],
-            'playerLetters' => $playerLetters,
             'letterBag' => $this->letterBag,
+            'players' => $players,
+            'status' => $this->status,
+            'playerToMove' => $this->playerToMove ? $this->playerToMove->getName() : null,
+            'playerLetters' => $playerLetters,
+            'gameId' => $this->gameId->getId(),
+            'playOrder' => $this->playOrder,
         ];
     }
 }

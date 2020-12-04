@@ -3,6 +3,7 @@
 namespace MySelf\Scrabble\Infrastructure\Delivery\Console;
 
 use MySelf\Scrabble\Application\StartGameService\StartGameService;
+use MySelf\Scrabble\Presentation\Cli\BoardView;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,11 +13,13 @@ class StartGameCommand extends Command
 {
     protected static $defaultName = 'startGame';
     private StartGameService $startGameService;
+    private BoardView $boardView;
 
-    public function __construct(StartGameService $startGameService)
+    public function __construct(StartGameService $startGameService, BoardView $boardView)
     {
         parent::__construct();
         $this->startGameService = $startGameService;
+        $this->boardView = $boardView;
     }
 
     protected function configure()
@@ -31,6 +34,8 @@ class StartGameCommand extends Command
         $playerName = $input->getArgument('player');
 
         $this->startGameService->run($playerName);
+
+        $output->writeln($this->boardView->get([]));
 
         return Command::SUCCESS;
     }

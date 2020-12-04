@@ -4,8 +4,12 @@ namespace MySelf\Scrabble\Presentation\Cli;
 
 class BoardView
 {
-    public function get($boardArray)
+    public function get(array $boardArray): string
     {
+        if (!$boardArray) {
+            return '';
+        }
+
         $view = '';
         
         $view .= "\n0. ";

@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a7065735026ea77f64f7729d0a287ed",
+    "content-hash": "901e5e8932465a3201607e06f6af0251",
     "packages": [
+        {
+            "name": "jawira/plantuml-encoding",
+            "version": "v1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jawira/plantuml-encoding.git",
+                "reference": "cd9e39eb95c682f6b15edb6c6f39253321628592"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jawira/plantuml-encoding/zipball/cd9e39eb95c682f6b15edb6c6f39253321628592",
+                "reference": "cd9e39eb95c682f6b15edb6c6f39253321628592",
+                "shasum": ""
+            },
+            "require": {
+                "ext-zlib": "*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.47",
+                "symplify/changelog-linker": "^8.3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/plantuml_functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jawira Portugal"
+                }
+            ],
+            "description": "PlantUML text encoding functions",
+            "keywords": [
+                "encodep",
+                "encoding",
+                "functions",
+                "plantuml",
+                "uml"
+            ],
+            "support": {
+                "issues": "https://github.com/jawira/plantuml-encoding/issues",
+                "source": "https://github.com/jawira/plantuml-encoding/tree/v1.0.8"
+            },
+            "time": "2020-10-01T08:56:21+00:00"
+        },
         {
             "name": "monolog/monolog",
             "version": "2.1.1",

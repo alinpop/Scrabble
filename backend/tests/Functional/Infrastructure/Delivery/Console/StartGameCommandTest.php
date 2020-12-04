@@ -10,6 +10,7 @@ use MySelf\Scrabble\Domain\Players\Player;
 use MySelf\Scrabble\Infrastructure\Delivery\Console\AddPlayerToGameCommand;
 use MySelf\Scrabble\Infrastructure\Delivery\Console\PrepareGameCommand;
 use MySelf\Scrabble\Infrastructure\Delivery\Console\StartGameCommand;
+use MySelf\Scrabble\Presentation\Cli\BoardView;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class StartGameCommandTest extends CommandTestCase
@@ -36,7 +37,7 @@ class StartGameCommandTest extends CommandTestCase
         ));
 
         self::$startGameCommand = new CommandTester(new StartGameCommand(
-            new StartGameService(self::$playerRepository, self::$gameRepository)
+            new StartGameService(self::$playerRepository, self::$gameRepository), new BoardView()
         ));
     }
 
@@ -59,6 +60,13 @@ class StartGameCommandTest extends CommandTestCase
         $this->assertCount(7, $gameArray['playerLetters']['player_1']);
         $this->assertCount(7, $gameArray['playerLetters']['player_2']);
         $this->assertCount(7, $gameArray['playerLetters']['player_3']);
+
+        $this->assertCount(100-21, $gameArray['letterBag']);
+
+        $playerOrderToMove = explode(',', $gameArray['playOrder']);
+        $this->assertCount(3, $playerOrderToMove);
+
+        $this->assertEquals($playerOrderToMove[0], $gameArray['playerToMove']);
     }
 
     /**

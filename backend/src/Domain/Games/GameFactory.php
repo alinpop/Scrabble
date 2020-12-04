@@ -34,7 +34,9 @@ class GameFactory
             (new LetterBagFactory())->fromArray($array['letterBag']),
             (new PlayerFactory())->fromCollection($array['players']),
             $array['status'],
+            $array['playerToMove'] ? new Player($array['playerToMove']) : null,
             $array['playerLetters'],
+            $array['playOrder'],
             new GameId($array['gameId'])
         );
 
