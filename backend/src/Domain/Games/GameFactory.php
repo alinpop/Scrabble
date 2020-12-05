@@ -3,6 +3,7 @@
 namespace MySelf\Scrabble\Domain\Games;
 
 use MySelf\Scrabble\Domain\Boards\Board;
+use MySelf\Scrabble\Domain\Boards\BoardFactory;
 use MySelf\Scrabble\Domain\Letters\LetterBagFactory;
 use MySelf\Scrabble\Domain\Letters\LetterFactory;
 use MySelf\Scrabble\Domain\Players\Player;
@@ -19,18 +20,17 @@ class GameFactory
         );
     }
 
-    public function fromArray(array $array, ?string $initiator = null): Game
+    private function fromArray(array $array, ?string $initiator = null): Game
     {
         $initiatorOfTheGame = $initiator ?? $array['players'][0];
 
-        $letterFactory = new LetterFactory();
         foreach ($array['playerLetters'] as &$letters) {
-            $letters = $letterFactory->fromArray($letters);
+            $letters = LetterFactory::fromArray($letters);
         }
 
         $game = new Game(
             new Player($initiatorOfTheGame),
-            new Board(),
+            BoardFactory::fromArray($array['board']),
             (new LetterBagFactory())->fromArray($array['letterBag']),
             (new PlayerFactory())->fromCollection($array['players']),
             $array['status'],

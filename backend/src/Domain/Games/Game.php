@@ -15,15 +15,15 @@ class Game implements \JsonSerializable
     private GameId $gameId;
 
     /** @var Player[]  */
-    private array $players = [];
+    private array $players;
     private Board $board;
     private LetterBag $letterBag;
 
     private Player $initiator;
     private string $status;
-    private string $playOrder = '';
+    private string $playOrder;
     private ?Player $playerToMove;
-    private array $playerLetters = [];
+    private array $playerLetters;
 
     public function __construct(
         Player $initiator,
@@ -57,7 +57,7 @@ class Game implements \JsonSerializable
         return $this->gameId;
     }
 
-    public function getLetterBag()
+    public function getLetterBag(): LetterBag
     {
         return $this->letterBag;
     }
@@ -70,6 +70,11 @@ class Game implements \JsonSerializable
     public function getPlayerToMove(): Player
     {
         return $this->playerToMove;
+    }
+
+    public function getPlayOrder(): string
+    {
+        return $this->playOrder;
     }
 
     public function getBoard(): Board
@@ -159,7 +164,7 @@ class Game implements \JsonSerializable
         }
 
         return [
-            'board' => [],
+            'board' => $this->board->jsonSerialize(),
             'letterBag' => $this->letterBag,
             'players' => $players,
             'status' => $this->status,

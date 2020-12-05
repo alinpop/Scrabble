@@ -7,6 +7,7 @@ use MySelf\Scrabble\Domain\Boards\SquareBonus\DoubleValueForWord;
 use MySelf\Scrabble\Domain\Boards\SquareBonus\SquareBonus;
 use MySelf\Scrabble\Domain\Boards\SquareBonus\TripleValueForLetter;
 use MySelf\Scrabble\Domain\Boards\SquareBonus\TripleValueForWord;
+use MySelf\Scrabble\Domain\Letters\Letter;
 
 class Board implements \JsonSerializable
 {
@@ -86,11 +87,18 @@ class Board implements \JsonSerializable
             $getNextSquare = 'getSquareFromBellow';
         }
 
-        $square = $this->getSquare($squareValue);
         foreach ($letters as $letter) {
+            $square = !isset($square) ? $this->getSquare($squareValue) : $this->$getNextSquare($square);
+            while ($square->getLetter()) {
+                $square = $this->$getNextSquare($square);
+            }
             $square->addLetter($letter);
-            $square = $this->$getNextSquare($square);
         }
+    }
+
+    public function addLetterByIndexes(int $rowIndex, int $columnIndex, string $letter)
+    {
+        $this->squares[$rowIndex][$columnIndex]->addLetter(new Letter($letter));
     }
 
     private function getSquareBonus(int $column, string $row): ?SquareBonus

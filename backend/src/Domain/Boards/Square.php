@@ -75,6 +75,6 @@ class Square implements \JsonSerializable
 
     public function jsonSerialize(): ?string
     {
-        return $this->letter ? null : $this->letter->getLetter();
+        return $this->letter ? $this->letter->getLetter() : null;
     }
 }

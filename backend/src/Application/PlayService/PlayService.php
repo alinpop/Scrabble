@@ -25,7 +25,7 @@ class PlayService
         $this->boardService = $boardService;
     }
 
-    public function run(string $playerName, string $square, string $direction, string $letters)
+    public function run(string $playerName, string $square, string $direction, string $letters): array
     {
         $game = $this->gameRepository->getPlayerGame(
             $this->playerRepository->getPlayer($playerName)
@@ -55,6 +55,7 @@ class PlayService
 
         return [
             'board' => $this->boardService->run($game->getBoard()),
+            'playOrder' => $game->getPlayOrder(),
             'playerToMove' => $game->getPlayerToMove(),
         ];
     }

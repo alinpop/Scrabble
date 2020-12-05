@@ -65,14 +65,22 @@ class PlayCommandTest extends CommandTestCase
     {
         $game = self::$gameRepository->getPlayerGame(new Player('player_1'));
         $playerToMove = $game->getPlayerToMove()->getName();
-
         self::$playCommand->execute([
             'player' => $playerToMove, 'square' => '8H', 'direction' => 'right', 'letters' => 'ABC',
         ]);
 
         $this->assertBoardIsDisplayed(self::$playCommand);
-
         $this->assertStringContainsString('A  B  C', self::$playCommand->getDisplay());
+
+        $game = self::$gameRepository->getPlayerGame(new Player('player_1'));
+        $playerToMove = $game->getPlayerToMove()->getName();
+        self::$playCommand->execute([
+            'player' => $playerToMove, 'square' => '8H', 'direction' => 'down', 'letters' => 'DEF',
+        ]);
+        $this->assertStringContainsString('A  B  C', self::$playCommand->getDisplay());
+        $this->assertStringContainsString('_  _  +  _  _  _  +  D  +  _  _  _  +  _  _', self::$playCommand->getDisplay());
+        $this->assertStringContainsString('_  +  _  _  _  +  _  E  _  +  _  _  _  +  _', self::$playCommand->getDisplay());
+        $this->assertStringContainsString('_  _  _  _  *  _  _  F  _  _  *  _  _  _  _', self::$playCommand->getDisplay());
     }
 
     public function testPlayingWrongPlayer()

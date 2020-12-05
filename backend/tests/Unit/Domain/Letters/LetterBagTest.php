@@ -1,5 +1,11 @@
 <?php
 
+namespace MySelf\Scrabble\Domain\Letters;
+
+function array_rand(): int {
+    return 2;
+}
+
 namespace MySelf\Scrabble\Tests\Unit\Domain\Letters;
 
 use MySelf\Scrabble\Domain\Letters\Letter;
