@@ -4,24 +4,26 @@ namespace MySelf\Scrabble\Tests\Functional\Infrastructure\Delivery\Console;
 
 use MySelf\Scrabble\Application\AddPlayerToGameService\AddPlayerToGameService;
 use MySelf\Scrabble\Application\DisplayBoardService\DisplayBoardService;
+use MySelf\Scrabble\Application\PlayService\PlayService;
 use MySelf\Scrabble\Application\PrepareGameService\PrepareGameService;
 use MySelf\Scrabble\Application\StartGameService\StartGameService;
-use MySelf\Scrabble\Domain\Games\Game;
 use MySelf\Scrabble\Domain\Players\Player;
 use MySelf\Scrabble\Infrastructure\Delivery\Console\AddPlayerToGameCommand;
+use MySelf\Scrabble\Infrastructure\Delivery\Console\PlayCommand;
 use MySelf\Scrabble\Infrastructure\Delivery\Console\PrepareGameCommand;
 use MySelf\Scrabble\Infrastructure\Delivery\Console\StartGameCommand;
 use MySelf\Scrabble\Presentation\Cli\BoardView;
 use MySelf\Scrabble\Tests\Functional\AssertBoardIsDisplayed;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class StartGameCommandTest extends CommandTestCase
+class PlayCommandTest extends CommandTestCase
 {
     use AssertBoardIsDisplayed;
 
-    private static CommandTester $startGameCommand;
-    private static CommandTester $addPlayerCommand;
     private static CommandTester $prepareGameCommand;
+    private static CommandTester $addPlayerCommand;
+    private static CommandTester $startGameCommand;
+    private static CommandTester $playCommand;
 
     public static function setUpBeforeClass(): void
     {
@@ -41,59 +43,64 @@ class StartGameCommandTest extends CommandTestCase
         ));
 
         self::$startGameCommand = new CommandTester(new StartGameCommand(
-            new StartGameService(new DisplayBoardService(), self::$playerRepository, self::$gameRepository), new BoardView()
+            new StartGameService(new DisplayBoardService(), self::$playerRepository, self::$gameRepository),
+            new BoardView()
         ));
-    }
 
-    public function testStartGame()
-    {
+        self::$playCommand = new CommandTester(
+            new PlayCommand(
+                new PlayService(new DisplayBoardService(), self::$playerRepository, self::$gameRepository),
+                new BoardView()
+            )
+        );
+
         self::$prepareGameCommand->execute(['player' => 'player_1']);
         self::$addPlayerCommand->execute(['player' => 'player_1', 'newPlayer' => 'player_2']);
         self::$addPlayerCommand->execute(['player' => 'player_1', 'newPlayer' => 'player_3']);
 
         self::$startGameCommand->execute(['player' => 'player_1']);
-
-        $game = self::$gameRepository->getPlayerGame(
-            self::$playerRepository->getPlayer('player_1')
-        );
-
-        $gameArray = $this->objectToArray($game);
-
-        $this->assertEquals(Game::STATUS_STARTED, $gameArray['status']);
-
-        $this->assertCount(7, $gameArray['playerLetters']['player_1']);
-        $this->assertCount(7, $gameArray['playerLetters']['player_2']);
-        $this->assertCount(7, $gameArray['playerLetters']['player_3']);
-
-        $this->assertCount(100-21, $gameArray['letterBag']);
-
-        $playerOrderToMove = explode(',', $gameArray['playOrder']);
-        $this->assertCount(3, $playerOrderToMove);
-
-        $this->assertEquals($playerOrderToMove[0], $gameArray['playerToMove']);
-
-        $this->assertBoardIsDisplayed(self::$startGameCommand);
     }
 
-    /**
-     * @depends testStartGame
-     */
-    public function testAddingPlayerAfterTheStartGame()
+    public function testPlay()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Player cannot be added when Game status is started");
+        $game = self::$gameRepository->getPlayerGame(new Player('player_1'));
+        $playerToMove = $game->getPlayerToMove()->getName();
 
-        self::$addPlayerCommand->execute(['player' => 'player_1', 'newPlayer' => 'player_4']);
+        self::$playCommand->execute([
+            'player' => $playerToMove, 'square' => '8H', 'direction' => 'right', 'letters' => 'ABC',
+        ]);
+
+        $this->assertBoardIsDisplayed(self::$playCommand);
+
+        $this->assertStringContainsString('A  B  C', self::$playCommand->getDisplay());
     }
 
-    /**
-     * @depends testStartGame
-     */
-    public function testPlayerStartingNotAvailableGame()
+    public function testPlayingWrongPlayer()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('No Game started');
+        $this->expectExceptionMessage("It's not your turn");
+        
+        $game = self::$gameRepository->getPlayerGame(new Player('player_1'));
+        $playerToMove = $game->getPlayerToMove();
+        $wrongPlayerToMove = 'player_1';
+        if ($playerToMove->getName() === 'player_1') {
+            $wrongPlayerToMove = 'player_2';
+        }
 
-        self::$startGameCommand->execute(['player' => 'player_4']);
+        self::$playCommand->execute([
+            'player' => $wrongPlayerToMove, 'square' => '8H', 'direction' => 'right', 'letters' => 'ABC',
+        ]);
+    }
+
+    public function testPlayingBeforeTheGameStarted()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('you cannot play');
+
+        self::$prepareGameCommand->execute(['player' => 'player_4']);
+
+        self::$playCommand->execute([
+            'player' => 'player_4', 'square' => '8H', 'direction' => 'right', 'letters' => 'ABC',
+        ]);
     }
 }

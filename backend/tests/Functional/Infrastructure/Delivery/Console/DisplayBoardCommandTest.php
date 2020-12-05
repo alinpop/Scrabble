@@ -17,8 +17,6 @@ class DisplayBoardCommandTest extends TestCase
 
         $commandTester->execute([]);
 
-        $output = $commandTester->getDisplay();
-
-        $this->assertBoardIsDisplayed($output);
+        $this->assertBoardIsDisplayed($commandTester);
     }
 }

@@ -10,14 +10,25 @@ use MySelf\Scrabble\Domain\Boards\SquareBonus\TripleValueForWord;
 
 class Board implements \JsonSerializable
 {
-    /**
-     * @var array
-     */
-    private $squares = [];
+    private const BOARD_DIRECTION_RIGHT = "right";
+    private const BOARD_DIRECTION_DOWN = "down";
+
+    private array $squares = [];
+    private array $columns;
+    private array $rows;
+    private array $mapToSquares;
 
     public function __construct()
     {
+        $this->columns = range(1, 15);
+        $this->rows = range('A', 'O');
+
         $this->startBoard();
+
+        $this->mapToSquares = [
+            'columns' => array_flip($this->columns),
+            'rows' => array_flip($this->rows),
+        ];
     }
 
     /**
@@ -28,17 +39,57 @@ class Board implements \JsonSerializable
         return $this->squares;
     }
 
+    public function getSquare(Square $square): Square
+    {
+        return $this->squares[$this->getRowIndex($square)][$this->getColumnIndex($square)];
+    }
+
+    public function getSquareToRight(Square $square): Square
+    {
+        return $this->squares[$this->getRowIndex($square)][$this->getColumnIndex($square) + 1];
+    }
+
+    public function getSquareFromBellow(Square $square): Square
+    {
+        return $this->squares[$this->getRowIndex($square) + 1][$this->getColumnIndex($square)];
+    }
+
+    private function getRowIndex(Square $square): int
+    {
+        return $this->mapToSquares['rows'][$square->getRow()];
+    }
+
+    private function getColumnIndex(Square $square): int
+    {
+        return $this->mapToSquares['columns'][$square->getColumn()];
+    }
+
     private function startBoard()
     {
-        $columns = range(1, 15);
-        $rows = range('A', 'O');
-
-        foreach ($rows as $keyRow => $row) {
-            foreach ($columns as $keyColumn => $column) {
+        foreach ($this->rows as $keyRow => $row) {
+            foreach ($this->columns as $keyColumn => $column) {
                 $bonus = $this->getSquareBonus($column, $row);
 
                 $this->squares[$keyRow][$keyColumn] = new Square($column, $row, $bonus);
             }
+        }
+    }
+
+    public function addLetters(Square $squareValue, string $direction, array $letters): void
+    {
+        if (!in_array($direction, [self::BOARD_DIRECTION_RIGHT, self::BOARD_DIRECTION_DOWN])) {
+            throw new \Exception('Wrong word direction');
+        }
+
+        $getNextSquare = 'getSquareToRight';
+        if ($direction === self::BOARD_DIRECTION_DOWN) {
+            $getNextSquare = 'getSquareFromBellow';
+        }
+
+        $square = $this->getSquare($squareValue);
+        foreach ($letters as $letter) {
+            $square->addLetter($letter);
+            $square = $this->$getNextSquare($square);
         }
     }
 

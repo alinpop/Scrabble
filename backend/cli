@@ -14,5 +14,6 @@ $application->add((new CreatePlayerCommandFactory())->get());
 $application->add((new PrepareGameCommandFactory())->get());
 $application->add((new AddPlayerToGameCommandFactory())->get());
 $application->add((new StartGameCommandFactory())->get());
+$application->add((new PlayCommandFactory())->get());
 
 $application->run();

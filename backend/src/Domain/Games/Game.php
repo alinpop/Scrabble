@@ -67,6 +67,16 @@ class Game implements \JsonSerializable
         return $this->status;
     }
 
+    public function getPlayerToMove(): Player
+    {
+        return $this->playerToMove;
+    }
+
+    public function getBoard(): Board
+    {
+        return $this->board;
+    }
+
     public function addPlayer(Player $player)
     {
         $this->players[] = $player;
@@ -101,6 +111,23 @@ class Game implements \JsonSerializable
         }
 
         $this->status = $status;
+    }
+
+    public function updatePlayerToMove(): void
+    {
+        $this->playerToMove;
+
+        $playersOrdered = explode(',', $this->playOrder);
+
+        $currentOrderKey = array_search($this->playerToMove->getName(), $playersOrdered);
+        $nextOrderKey = $currentOrderKey + 1;
+        if (!isset($playersOrdered[$nextOrderKey])) {
+            $this->playerToMove = new Player($playersOrdered[0]);
+
+            return;
+        }
+
+        $this->playerToMove = new Player($playersOrdered[$nextOrderKey]);
     }
 
     public function start()
@@ -141,10 +168,5 @@ class Game implements \JsonSerializable
             'gameId' => $this->gameId->getId(),
             'playOrder' => $this->playOrder,
         ];
-    }
-
-    public function getBoard(): Board
-    {
-        return $this->board;
     }
 }

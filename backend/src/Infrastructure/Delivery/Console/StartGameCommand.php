@@ -37,6 +37,9 @@ class StartGameCommand extends Command
 
         $output->writeln($this->boardView->get($board));
 
+        /** @todo Output the players and their scores. Output the player who will move. */
+        /** @todo Validate which player will move further. */
+
         return Command::SUCCESS;
     }
 }

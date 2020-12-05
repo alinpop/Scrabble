@@ -18,15 +18,13 @@ class DisplayBoardService
         $squares = $board->getSquares();
 
         $data = [];
-        foreach ($squares as $squaresOnRows)
-        {
+        foreach ($squares as $squaresOnRows) {
             /** @var Square $square */
             foreach ($squaresOnRows as $square) {
                 $squareLetter = $square->getLetter() ? ' ' . $square->getLetter() : ' _';
 
                 if ($squareLetter === ' _' && $square->getBonus() !== null) {
                     $squareLetter = $this->setSquareBonusField($square->getBonus());
-                    //$squareLetter = ' <comment>%</comment>';
                 }
 
                 $data[$square->getRow()][sprintf('%02d', $square->getColumn())] = $squareLetter;

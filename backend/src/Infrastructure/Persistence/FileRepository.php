@@ -26,6 +26,12 @@ class FileRepository
 
     protected function readData(): \Generator
     {
+        if (!file_exists($this->repositoryFile)) {
+            yield '';
+
+            return;
+        }
+
         $file = fopen($this->repositoryFile, 'r');
 
         while (!feof($file)) {

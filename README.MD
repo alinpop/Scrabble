@@ -14,7 +14,12 @@ php backend/cli addPlayer player_3 player_1
 php backend/cli addPlayer player_3 player_2
 
 php backend/cli startGame player_3
-```
+
+php backend/cli play player_1 7H right BRING
+php backend/cli play player_2 11H down OLD
+php backend/cli play player_3 9I right NOE
+
+``` 
 
 # Concepts
 

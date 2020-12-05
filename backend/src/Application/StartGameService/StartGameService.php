@@ -12,8 +12,11 @@ class StartGameService
     private PlayerRepository $playerRepository;
     private DisplayBoardService $boardService;
 
-    public function __construct(DisplayBoardService $boardService, PlayerRepository $playerRepository, GameRepository $gameRepository)
-    {
+    public function __construct(
+        DisplayBoardService $boardService,
+        PlayerRepository $playerRepository,
+        GameRepository $gameRepository
+    ) {
         $this->gameRepository = $gameRepository;
         $this->playerRepository = $playerRepository;
         $this->boardService = $boardService;

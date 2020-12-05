@@ -13,4 +13,12 @@ class LetterFactory
 
         return $letters;
     }
+
+    public function fromString(string $string): array
+    {
+        $string = strtoupper($string);
+        $letters = str_split($string);
+
+        return $this->fromArray($letters);
+    }
 }
