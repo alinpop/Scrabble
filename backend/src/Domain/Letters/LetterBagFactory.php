@@ -11,7 +11,7 @@ class LetterBagFactory
             $letters[] = new Letter($letter, Letter::MAP[$letter]['value']);
         }
 
-        return new LetterBag(...$letters);
+        return new LetterBag(new RandomArrayKeys(), ...$letters);
     }
 
     public function new(): LetterBag
@@ -25,6 +25,6 @@ class LetterBagFactory
             }
         }
 
-        return new LetterBag(...$letters);
+        return new LetterBag(new RandomArrayKeys(), ...$letters);
     }
 }

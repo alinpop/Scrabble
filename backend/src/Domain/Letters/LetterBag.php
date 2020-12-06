@@ -4,17 +4,17 @@ namespace MySelf\Scrabble\Domain\Letters;
 
 class LetterBag implements \Countable, \JsonSerializable
 {
-    /**
-     * @var Letter[]
-     */
+    /** @var Letter[] */
     private array $letters;
+    private RandomArrayKeys $randomArrayKey;
 
-    public function __construct(Letter ...$letters)
+    public function __construct(RandomArrayKeys $randomArrayKey, Letter ...$letters)
     {
         $this->letters = $letters;
+        $this->randomArrayKey = $randomArrayKey;
     }
 
-    public function getLetters()
+    public function getLetters(): array
     {
         return $this->letters;
     }
@@ -39,7 +39,7 @@ class LetterBag implements \Countable, \JsonSerializable
             $this->letters = [];
         }
 
-        $randomKeys = array_rand($this->letters, $number);
+        $randomKeys = $this->randomArrayKey->get($this->letters, $number);
         foreach ((array) $randomKeys as $key) {
             $letters[] = $this->letters[$key];
             $this->letters[$key] = null;
@@ -50,7 +50,7 @@ class LetterBag implements \Countable, \JsonSerializable
         return $letters;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $letters = [];
         foreach ($this->letters as $letter) {

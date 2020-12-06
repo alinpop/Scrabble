@@ -1,15 +1,10 @@
 <?php
 
-namespace MySelf\Scrabble\Domain\Letters;
-
-function array_rand(): int {
-    return 2;
-}
-
 namespace MySelf\Scrabble\Tests\Unit\Domain\Letters;
 
 use MySelf\Scrabble\Domain\Letters\Letter;
 use MySelf\Scrabble\Domain\Letters\LetterBag;
+use MySelf\Scrabble\Domain\Letters\RandomArrayKeys;
 use PHPUnit\Framework\TestCase;
 
 class LetterBagTest extends TestCase
@@ -17,6 +12,7 @@ class LetterBagTest extends TestCase
     public function testCount()
     {
         $bag = new LetterBag(
+            $this->createMock(RandomArrayKeys::class),
             new Letter('A', 1),
             new Letter('M', 4)
         );
@@ -27,6 +23,7 @@ class LetterBagTest extends TestCase
     public function testExtractingLetter()
     {
         $bag = new LetterBag(
+            new RandomArrayKeys(),
             new Letter('A', 1),
             new Letter('M', 4),
             new Letter('N', 1),
@@ -40,6 +37,7 @@ class LetterBagTest extends TestCase
     public function testAddingLetter()
     {
         $bag = new LetterBag(
+            $this->createMock(RandomArrayKeys::class),
             new Letter('A', 1),
             new Letter('T', 1)
         );
@@ -56,7 +54,11 @@ class LetterBagTest extends TestCase
 
     public function testExtractingRandomLetters()
     {
+        $randomArrayKeys = $this->createMock(RandomArrayKeys::class);
+        $randomArrayKeys->method('get')->willReturn(1);
+
         $bag = new LetterBag(
+            $randomArrayKeys,
             new Letter('A', 1),
             new Letter('M', 4),
             new Letter('N', 1),
