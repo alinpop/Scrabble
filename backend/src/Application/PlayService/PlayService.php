@@ -40,13 +40,24 @@ class PlayService
             throw new \Exception("It's not your turn, next player to move is $playerToMove");
         }
 
+        /** @todo Validate letters */
+
+        /**
+         * @todo Validate words:
+         *      - clone the board,
+         *      - add the letters,
+         *      - validate letter position,
+         *      - identify words created
+         *      - validate words
+         */
+
+
         $game->getBoard()->addLetters(
             SquareFactory::fromString($square),
             $direction,
             (new LetterFactory())->fromString($letters)
         );
 
-        /** @todo Validate letters */
         /** @todo Validate margin of the board surpass */
 
         $game->updatePlayerToMove();

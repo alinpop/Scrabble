@@ -15,7 +15,7 @@ class DisplayBoardCommandTest extends TestCase
     {
         $commandTester = new CommandTester((new DisplayBoardCommandFactory())->get());
 
-        $commandTester->execute([]);
+        $commandTester->execute(['player' => 'player_1']);
 
         $this->assertBoardIsDisplayed($commandTester);
     }

@@ -164,14 +164,14 @@ class Game implements \JsonSerializable
         }
 
         return [
-            'board' => $this->board->jsonSerialize(),
-            'letterBag' => $this->letterBag,
-            'players' => $players,
+            'gameId' => $this->gameId->getId(),
             'status' => $this->status,
+            'players' => $players,
+            'playOrder' => $this->playOrder,
             'playerToMove' => $this->playerToMove ? $this->playerToMove->getName() : null,
             'playerLetters' => $playerLetters,
-            'gameId' => $this->gameId->getId(),
-            'playOrder' => $this->playOrder,
+            'board' => $this->board->jsonSerialize(),
+            'letterBag' => $this->letterBag,
         ];
     }
 }

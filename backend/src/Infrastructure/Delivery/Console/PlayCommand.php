@@ -42,8 +42,8 @@ class PlayCommand extends Command
         $data = $this->playService->run($playerName, $square, $direction, $letters);
 
         $output->writeln($this->boardView->get($data['board']));
-        $output->writeln($data['playOrder']);
-        $output->writeln($data['playerToMove']);
+        $output->writeln("Play order: {$data['playOrder']}");
+        $output->writeln("Player to move: {$data['playerToMove']}");
 
         return Command::SUCCESS;
     }
